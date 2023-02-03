@@ -17,7 +17,7 @@ export default function ProductScreen(props) {
   }, [dispatch, productId]);
 
   const addToCartHandler = () => {
-    props.history.push(`/cart/${productId}?qty={qty}`);
+    props.history.push(`/cart/${productId}?qty=${qty}`);
   }
 
   return (
@@ -78,13 +78,19 @@ export default function ProductScreen(props) {
                         <div className="row">
                             <div>Qty</div>
                             <div>
-                              <select value={qty} OnChange={(e) => setQty(e.tartget.value)}>
-                                {
-                                  [...Array(product.countInStock).keys()].map((x) => (
-                                    <option key={x+1} value={ x + 1}> {x+1} </option>
-                                  ))  
-                                }
-                                </select>
+                                <select
+                              value={qty}
+                              onChange={(e) => setQty(e.target.value)}
+                            >
+                              {[...Array(product.countInStock).keys()].map(
+                                (x) => (
+                                  <option key={x + 1} value={x + 1}>
+                                    {x + 1}
+                                  </option>
+                                )
+                              )}
+                            </select>
+
                             </div>
                         </div>
                       </li>

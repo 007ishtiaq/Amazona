@@ -1,4 +1,4 @@
-import { BrowserRouter , Route } from "react-router-dom";
+import { BrowserRouter , Route, Link } from "react-router-dom";
 import HomeScreen from "./screens/HomeScreen";
 import ProductScreen from "./screens/ProductScreen";
 import CartScreen from "./screens/CartScreen";
@@ -15,8 +15,8 @@ function App() {
             </a>
           </div>
           <div>
-            <a href="/cart">Cart</a>
-            <a href="/signin">Sign In</a>
+            <Link to="/cart">Cart</Link>
+            <Link to="/signin">Sign In</Link>
           </div>
         </header>
         <main>
