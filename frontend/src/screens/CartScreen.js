@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "../actions/cartActions";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import MessageBox from "../components/MessageBox";
 
 function CartScreen(props) {
   const productId = props.match.params.id;
@@ -19,8 +20,11 @@ function CartScreen(props) {
     }
   }, [dispatch, productId, qty]);
   const removeFromCartHandler = (id) => {
-
-  }
+    // some remove work
+  };
+  const checkoutHandler = (id) => {
+    props.history.push('/signin?redirect=shipping')
+  };
 
   return (
     <div className="row top">
@@ -32,43 +36,60 @@ function CartScreen(props) {
           </MessageBox>
         ) : (
           <ul>
-            {cartItems.map(
-              (item) => (
-                <li key={item.product}>
-                  <div className="row">
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="small"
-                    ></img>
-                  </div>
-                  <div className="mon-30">
+            {cartItems.map((item) => (
+              <li key={item.product}>
+                <div className="row">
+                  <img src={item.image} alt={item.name} className="small"></img>
+                  <div className="min-30">
                     <Link to={`/product/${item.product}`}> {item.name} </Link>
                   </div>
-                  <div className="mon-30">
-                    <select value={item.qty} onChange= {e => dispatch(addToCart(item.product), Number(e.target.value))}> 
-                    {[...Array(item.countInStock).keys()].map(
-                                (x) => (
-                                  <option key={x + 1} value={x + 1}>
-                                    {x + 1}
-                                  </option>
-                                )
-                              )}
+                  <div className="min-30">
+                    <select
+                      value={item.qty}
+                      onChange={(e) =>
+                        dispatch(
+                          addToCart(item.product, Number(e.target.value))                          
+                        )
+                      }
+                    >
+                      {[...Array(item.countInStock).keys()].map((x) => (
+                        <option key={x + 1} value={x + 1}>
+                          {x + 1}
+                        </option>
+                      ))}
                     </select>
                   </div>
                   <div>
-                  <div> Rs {item.price} </div>
+                    <div> Rs {item.price} </div>
                   </div>
                   <div>
-                  <button type="button" onClick={()=> removeFromCartHandler(item.product)}> Delete </button>
+                    <button
+                      type="button"
+                      onClick={() => removeFromCartHandler(item.product)}
+                    >
+                      Delete
+                    </button>
                   </div>
-
-
-                </li>
-              ))
-            )}
+                </div>
+              </li>
+            ))}
           </ul>
         )}
+      </div>
+      <div className="clo-1">
+        <div className="card card-body">
+          <ul>
+            <li>
+            <h2>
+                Subtotal ({cartItems.reduce((a, c) => a + c.qty, 0)} items) : Rs 
+                {cartItems.reduce((a, c) => a + c.price * c.qty, 0)}
+              </h2>
+            </li>
+            <li>
+              <button type="button" onClick={checkoutHandler} className="primary block" disabled={cartItems.length === 0}>Proceed to Checkout</button>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   );
